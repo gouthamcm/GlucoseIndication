@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
 
     Calendar calendar;
     DatabaseHelper mydb;
+    TextView serve_in_gms;
 
     String[] food_items = {"Banana", "Dosai with Chutney","Apple", "Banana ripe", "Dates dried", "Grapefruit", "Grapes average","Orange average", "Peach average", "Peach canned in light syrup", "Pear average", "Pear canned in pear juice", "Prunes pitted", "Raisins", "Watermelon", "Baked beans average", "Black beans", "Chickpeas", "Chickpeas canned in brine", "Navy beans",
             "Kidney beans", "Lentils", "Soya beans", "Cashews", "Peanut", "Macaroni", "Macaroni and Cheese", "Spaghetti", "Spaghetti white boiled 20 min", "Spaghetti wholemeal boiled", "Banana cake made with sugar", "Banana cake made without sugar", "Sponge cake plain", "Vanilla cake made from packet mix with vanilla frosting","Waffles Aunt Jemima (Quaker Oats)", "Bagel white frozen",
@@ -51,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
     Integer[] carbs_value = {24, 39, 16,25,33,11,17,11,13,18,13,11,33,44,6,15,23,30,22,30,25,18,6,12,4,48,51,48,22,27,29,22,36,58,13,35,15,15,16,12,20,68,50,14,15,24,26,26,34,42,25,31,15,18,9,15,26,25,26,30,22,24,17,26,21,19,21,42, 16,34,25,53,28,42,30,53,20,20,18,16,21,38,17,13,9,12,13,21};
 
     Integer[] gluco_value = {6, 5, 4, 3, 1};
+
+    Integer[] serve_vaues = {120,150,120,120,60,120,120,120,120,120,120,120,60,60,120,150,150,150,150,150,150,150,150,50,50,180,180,180,200,220,60,60,63,111,35,70,30,30,30,30,30,200,170,30,30,50,50,250,250,250,250,250,250,250,250,30,30,30,250,250,30,30,250,250,30,30,30,150,150,150,150,150,150,150,150,50,150,25,25,25,25,25,25,50,50,250,250,200};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
         food_serve = findViewById(R.id.spinner_foodserve);
         value = findViewById(R.id.food_value_intake);
         submit = findViewById(R.id.submit);
-
+        serve_in_gms = findViewById(R.id.serve_value);
         final Calendar calendar = Calendar.getInstance();
         time = calendar.get(Calendar.HOUR_OF_DAY)*60+calendar.get(Calendar.MINUTE)+calendar.get(Calendar.SECOND)/60;
         mydb = new DatabaseHelper(this);
@@ -88,6 +92,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 position = i;
+                serve_in_gms.setText(serve_vaues[i] + "gms");
             }
 
             @Override
@@ -103,6 +108,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 p2 = i;
+
             }
 
             @Override
@@ -127,12 +133,13 @@ public class MainActivity extends AppCompatActivity {
                             flag=0;
                         }
                         else{
-                            result += (p2+1)*carbs_value[position]*gluco_value[gluco_pos];
+                            result += (p2+1)*carbs_value[position]*gluco_value[gluco_pos]/10;
                             flag=1;
                         }
                     }
                     else{
-                        result += Double.valueOf(v)*carbs_value[position]*gluco_value[gluco_pos];
+                        result += Double.valueOf(v)*carbs_value[position]*gluco_value[gluco_pos]/10;
+
                         flag=1;
                     }
                 }
@@ -172,12 +179,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void update_glucose_value(){
-        if(cursor.getDouble(2) > 180) {
+        if(cursor.getDouble(2) > 110) {
             Calendar calendar = Calendar.getInstance();
             //Toast.makeText(this, cursor.getString(4)+","+ cursor.getString(5) , Toast.LENGTH_SHORT).show();
-            slope = (180 - cursor.getDouble(6)) / (120);
+            slope = (110 - cursor.getDouble(6)) / (120);
             double r = cursor.getDouble(6) + slope * (calendar.get(Calendar.HOUR_OF_DAY)*60+calendar.get(Calendar.MINUTE)+calendar.get(Calendar.SECOND)/60 - cursor.getDouble(4));
-            if(r<180){ r=180;}
+            if(r<110){ r=110;}
             Log.e("TAG", "inside "+cursor.getString(2)+" "+cursor.getString(6));
             mydb.update_user(1, r, cursor.getDouble(3), cursor.getDouble(4), calendar.get(Calendar.HOUR_OF_DAY)*60+calendar.get(Calendar.MINUTE)+calendar.get(Calendar.SECOND)/60, cursor.getDouble(6));
             Log.e("TAG", "updated "+cursor.getString(2)+" "+cursor.getString(6));

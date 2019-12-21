@@ -48,21 +48,37 @@
         android:layout_margin="20dp"
         android:layout_below="@+id/spinner_fooditems"
         />
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/text_serve"
-        android:layout_below="@id/spinner_foodserve"
-        android:text="1 Serve = "/>
+        android:id="@+id/lin4"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/spinner_foodserve">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/text_serve"
+            android:textSize="25sp"
+            android:layout_margin="20dp"
+            android:text="1 Serve = "/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/serve_value"
+            android:layout_margin="20dp"
+            android:textSize="25sp"/>
+    </LinearLayout>
+
     <EditText
         android:id="@+id/food_value_intake"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="20dp"
-        android:layout_below="@+id/text_serve"
+        android:layout_below="@+id/lin4"
         android:layout_centerHorizontal="true"
         android:hint="Enter the serve..."
-        android:inputType="number"
+        android:inputType="numberDecimal"
         android:layout_margin="20dp"
         />
     <Button
